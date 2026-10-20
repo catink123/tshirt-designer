@@ -1,0 +1,92 @@
+html, body { height: 100%; }
+
+body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    font-family: system-ui, sans-serif;
+    background: #f2f3f5;
+    overflow: hidden;
+}
+
+.draw-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px;
+    background: #eee;
+    border-bottom: 1px solid #ccc;
+    flex: 0 0 auto;
+    flex-wrap: wrap;
+}
+
+.draw-toolbar button {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+.draw-toolbar .field {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    color: #333;
+}
+
+.draw-toolbar .field > i { color: #666; font-size: 12px; }
+
+.draw-toolbar input[type="color"] {
+    width: 30px;
+    height: 28px;
+    padding: 0;
+    border: 1px solid #bbb;
+    border-radius: 5px;
+    background: none;
+}
+
+.draw-toolbar input[type="range"] { width: 90px; }
+
+.draw-toolbar .toolbar-sep {
+    width: 1px;
+    height: 24px;
+    background: #ccc;
+    margin: 0 2px;
+}
+
+.draw-toolbar .spacer { flex: 1; }
+
+#canvasContainer {
+    flex: 1;
+    min-height: 0;
+    position: relative;
+    cursor: crosshair;
+    touch-action: none;
+    /* Checkered background — visible by default (toggle removes `.checker-off`) */
+    background-color: #ffffff;
+    background-image:
+        linear-gradient(45deg, #d8d8d8 25%, transparent 25%),
+        linear-gradient(-45deg, #d8d8d8 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #d8d8d8 75%),
+        linear-gradient(-45deg, transparent 75%, #d8d8d8 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+}
+
+#canvasContainer.checker-off {
+    background-image: none;
+    background-color: #ffffff;
+}
+
+#canvasContainer .konvajs-content { touch-action: none !important; }
+
+@media (max-width: 700px) {
+    .draw-toolbar { padding: 4px; gap: 3px; }
+    .draw-toolbar button { width: 34px; height: 34px; font-size: 13px; }
+    .draw-toolbar input[type="range"] { width: 60px; }
+    .draw-toolbar .field span { display: none; }
+}

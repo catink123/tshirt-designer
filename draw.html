@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Рисование</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="libs/konva.min.js"></script>
+    <script type="module" src="scripts/drawWindow.js" defer></script>
+
+    <link rel="stylesheet" href="styles/theme.css">
+    <link rel="stylesheet" href="styles/drawWindow.css">
+</head>
+<body>
+    <div class="draw-toolbar">
+        <div class="tool-group">
+            <button data-tool="select"  class="tool-btn" title="Выделение"><i class="fa-solid fa-arrow-pointer"></i></button>
+            <button data-tool="brush"   class="tool-btn active" title="Кисть"><i class="fa-solid fa-paintbrush"></i></button>
+            <button data-tool="eraser"  class="tool-btn" title="Ластик"><i class="fa-solid fa-eraser"></i></button>
+            <button data-tool="line"    class="tool-btn" title="Линия"><i class="fa-solid fa-slash"></i></button>
+            <button data-tool="arrow"   class="tool-btn" title="Стрелка"><i class="fa-solid fa-arrow-right-long"></i></button>
+            <button data-tool="rect"    class="tool-btn" title="Прямоугольник"><i class="fa-regular fa-square"></i></button>
+            <button data-tool="ellipse" class="tool-btn" title="Эллипс"><i class="fa-regular fa-circle"></i></button>
+            <button data-tool="text"    class="tool-btn" title="Текст"><i class="fa-solid fa-font"></i></button>
+        </div>
+
+        <div class="toolbar-sep"></div>
+
+        <label class="field" title="Цвет">
+            <i class="fa-solid fa-palette"></i>
+            <input type="color" id="color" value="#222222">
+        </label>
+
+        <label class="field" title="Размер">
+            <i class="fa-solid fa-circle-half-stroke"></i>
+            <input type="range" id="size" min="1" max="50" value="8">
+            <span id="sizeValue">8</span>
+        </label>
+
+        <div class="toolbar-sep"></div>
+
+        <button id="checkerBtn" class="active" title="Шахматный фон"><i class="fa-solid fa-chess-board"></i></button>
+
+        <div class="toolbar-sep"></div>
+
+        <button id="undoBtn" title="Отменить (Ctrl+Z)"><i class="fa-solid fa-rotate-left"></i></button>
+        <button id="redoBtn" title="Повторить (Ctrl+Y)"><i class="fa-solid fa-rotate-right"></i></button>
+        <button id="clearBtn" title="Очистить всё"><i class="fa-solid fa-trash"></i></button>
+
+        <span class="spacer"></span>
+
+        <button id="helpBtn" title="Справка"><i class="fa-solid fa-circle-question"></i></button>
+
+        <button id="cancelBtn" title="Отмена"><i class="fa-solid fa-xmark"></i></button>
+        <button id="doneBtn" class="primary" title="Добавить в дизайн"><i class="fa-solid fa-check"></i></button>
+    </div>
+
+    <div id="canvasContainer"></div>
+</body>
+</html>

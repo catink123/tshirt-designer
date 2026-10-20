@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Дизайнер футболок</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="libs/konva.min.js"></script>
+    <script type="module" src="scripts/main.js" defer></script>
+
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/theme.css">
+    <link rel="stylesheet" href="styles/toolbar.css">
+</head>
+<body>
+    <div class="drawArea"></div>
+
+    <div class="topControls">
+        <div class="container toolbar vertical hidden">
+            <div class="tool-group">
+                <button class="tool-btn active" data-tool="select" title="Выделение">
+                    <i class="fa-solid fa-arrow-pointer"></i>
+                </button>
+                <button class="tool-btn" data-tool="pan" title="Перемещение">
+                    <i class="fa-solid fa-hand"></i>
+                </button>
+            </div>
+
+            <div class="toolbar-sep"></div>
+
+            <button data-action="newDrawing" title="Новый рисунок"><i class="fa-solid fa-pen-nib"></i></button>
+            <button data-action="importImage" title="Импорт изображения"><i class="fa-solid fa-image"></i></button>
+            <button data-action="replaceImage" title="Заменить изображение" disabled><i class="fa-solid fa-arrows-rotate"></i></button>
+            <button data-action="removeBg" title="Удалить фон" disabled><i class="fa-solid fa-wand-magic-sparkles"></i></button>
+            <button data-action="editDrawing" title="Редактировать рисунок" disabled><i class="fa-solid fa-pencil"></i></button>
+
+            <div class="toolbar-sep"></div>
+
+            <button data-action="moveToTop" title="На передний план" disabled><i class="fa-solid fa-angle-double-up"></i></button>
+            <button data-action="moveUp" title="Выше" disabled><i class="fa-solid fa-angle-up"></i></button>
+            <button data-action="moveDown" title="Ниже" disabled><i class="fa-solid fa-angle-down"></i></button>
+            <button data-action="moveToBottom" title="На задний план" disabled><i class="fa-solid fa-angle-double-down"></i></button>
+
+            <div class="toolbar-sep"></div>
+
+            <button data-action="useMask" title="Использовать как маску" disabled><i class="fa-solid fa-mask"></i></button>
+            <button data-action="editMaskContent" title="Редактировать содержимое маски" disabled><i class="fa-solid fa-pen-to-square"></i></button>
+            <button data-action="clearMask" title="Очистить маску" disabled><i class="fa-solid fa-xmark"></i></button>
+            <button data-action="delete" title="Удалить выбранное" disabled><i class="fa-solid fa-trash"></i></button>
+
+            <div class="toolbar-sep"></div>
+
+            <button data-action="save" title="Сохранить"><i class="fa-solid fa-floppy-disk"></i></button>
+            <button data-action="load" title="Загрузить"><i class="fa-solid fa-folder-open"></i></button>
+            <button data-action="savePng" title="Скачать PNG"><i class="fa-solid fa-file-image"></i></button>
+        </div>
+
+        <button class="container" id="toolbarButton" title="Панель инструментов">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <button class="container" id="helpButton" title="Справка">
+            <i class="fa-solid fa-circle-question"></i>
+        </button>
+
+        <div class="container hint hidden" id="hint"></div>
+    </div>
+
+    <div class="zoomControls">
+        <button class="container zoom-btn" id="zoomIn" title="Увеличить"><i class="fa-solid fa-plus"></i></button>
+        <button class="container zoom-btn" id="zoomOut" title="Уменьшить"><i class="fa-solid fa-minus"></i></button>
+        <button class="container zoom-btn" id="zoomReset" title="Сбросить масштаб"><i class="fa-solid fa-compress"></i></button>
+        <button class="container zoom-btn" id="zoomFit" title="Показать всё"><i class="fa-solid fa-expand"></i></button>
+    </div>
+
+    <div class="container imagePanel hidden" id="imagePanel">
+        <div class="panel-row"><span class="panel-title">Настройки изображения</span></div>
+        <label class="panel-row">
+            <i class="fa-solid fa-sun" title="Яркость"></i>
+            <input type="range" id="brightness" min="-100" max="100" step="1" value="0">
+            <span class="val" id="brightnessVal">0</span>
+        </label>
+        <label class="panel-row">
+            <i class="fa-solid fa-circle-half-stroke" title="Контрастность"></i>
+            <input type="range" id="contrast" min="-100" max="100" step="1" value="0">
+            <span class="val" id="contrastVal">0</span>
+        </label>
+        <label class="panel-row">
+            <input type="checkbox" id="grayscale"> Оттенки серого
+        </label>
+        <button id="resetAdjust">Сбросить настройки</button>
+    </div>
+
+    <input type="file" id="imageFileInput" accept="image/*" multiple hidden>
+    <input type="file" id="replaceFileInput" accept="image/*" hidden>
+    <input type="file" id="loadFileInput" accept="application/json,.json" hidden>
+
+    <div class="bg-modal hidden" id="bgRemovalModal">
+        <div class="bg-modal-content">
+            <h3>Удаление фона</h3>
+            <p class="bg-hint" id="bgRemovalHint">Нажмите на фон, чтобы взять образец цвета.</p>
+
+            <div class="bg-canvas-wrap">
+                <canvas id="bgRemovalCanvas"></canvas>
+            </div>
+
+            <div class="bg-controls">
+                <label for="bgTolerance">Допуск</label>
+                <input type="range" id="bgTolerance" min="0" max="150" step="1" value="30">
+                <span id="bgToleranceVal">30</span>
+
+                <label for="bgFeather">Сглаживание</label>
+                <input type="range" id="bgFeather" min="0" max="12" step="1" value="1">
+                <span id="bgFeatherVal">1</span>
+
+                <label class="bg-check">
+                    <input type="checkbox" id="bgConnectedOnly" checked>
+                    Удалять только связанную область (безопасно для объектов того же цвета)
+                </label>
+
+                <label class="bg-check">
+                    <input type="checkbox" id="bgPreview" checked>
+                    Показать предпросмотр
+                </label>
+            </div>
+
+            <div class="bg-actions">
+                <button id="bgCancel"><i class="fa-solid fa-xmark"></i> Отмена</button>
+                <button id="bgApply" class="primary" disabled><i class="fa-solid fa-check"></i> Применить</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

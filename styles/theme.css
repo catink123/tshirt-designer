@@ -1,0 +1,183 @@
+.container {
+    background: #eee;
+    width: fit-content;
+    padding: 5px;
+    border-radius: 10px;
+    border: 1px #aaa solid;
+}
+
+button {
+    padding: 8px 10px;
+    border: none;
+    border-radius: 5px;
+    background: none;
+    font: inherit;
+    cursor: pointer;
+    transition-duration: .15s;
+    color: inherit;
+}
+button:hover  { background: rgba(200, 200, 200, 0.5); }
+button:active { background: rgba(150, 150, 150, 1); transition-duration: 0s; }
+button:disabled { opacity: .4; cursor: default; }
+button:disabled:hover { background: none; }
+button.active {
+    background: rgba(74, 144, 226, 0.15);
+    box-shadow: inset 0 0 0 1px rgba(74, 144, 226, 0.5);
+}
+button.primary { background: #4a90e2; color: #fff; }
+button.primary:hover   { background: #3d7dc9; }
+button.primary:disabled { background: #9bbde4; }
+
+/* Icon buttons */
+.toolbar button,
+.zoom-btn,
+#toolbarButton,
+#helpButton {
+    width: 40px; height: 40px; padding: 0;
+    display: inline-flex;
+    align-items: center; justify-content: center;
+    font-size: 15px;
+}
+
+.tool-group {
+    display: inline-flex;
+    gap: 2px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 6px;
+    padding: 2px;
+}
+.tool-group .tool-btn.active {
+    background: #4a90e2; color: #fff; box-shadow: none;
+}
+.tool-group .tool-btn.active:hover { background: #3d7dc9; }
+
+/* ------------------------------------------------------- help modal ------ */
+
+.help-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1200;
+    padding: 20px;
+}
+
+.help-modal-content {
+    position: relative;
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    width: min(94vw, 720px);
+    max-height: 88vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.help-modal-content h2 {
+    margin: 0;
+    font-size: 22px;
+    padding-right: 40px;
+}
+
+.help-subtitle {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+    padding-right: 40px;
+}
+
+.help-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 16px;
+    color: #555;
+}
+
+.help-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.help-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.help-section h3 {
+    margin: 0;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #4a90e2;
+    font-weight: 600;
+}
+
+.help-items {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+}
+
+@media (min-width: 600px) {
+    .help-items { grid-template-columns: 1fr 1fr; }
+}
+
+.help-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 8px 10px;
+    background: #f7f8fa;
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.help-item > i {
+    flex-shrink: 0;
+    width: 20px;
+    text-align: center;
+    color: #4a90e2;
+    font-size: 14px;
+    margin-top: 2px;
+}
+
+.help-item-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.help-item-text strong { font-weight: 600; color: #222; }
+.help-item-text span   { color: #555; }
+
+.help-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.help-footer button i { margin-right: 4px; }
+
+@media (max-width: 500px) {
+    .help-modal { padding: 8px; }
+    .help-modal-content { padding: 16px; }
+    .help-modal-content h2 { font-size: 18px; }
+}
