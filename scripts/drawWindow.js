@@ -103,6 +103,21 @@ const stage = new Konva.Stage({
 const linesLayer = new Konva.Layer();
 stage.add(linesLayer);
 
+// iOS / Android: the browser must not interpret a drawing gesture as a
+// text selection, long-press callout, or scroll. A native listener with
+// `passive: false` is the only way to reliably call preventDefault in time;
+// the Konva handlers still fire normally afterwards.
+['touchstart', 'touchmove', 'contextmenu', 'dragstart'].forEach((type) => {
+    containerEl.addEventListener(type, (e) => {
+        if (e.cancelable) e.preventDefault();
+    }, { passive: false });
+});
+window.addEventListener('selectstart', (e) => {
+    if (e.target && e.target.closest && e.target.closest('#canvasContainer')) {
+        e.preventDefault();
+    }
+});
+
 const transformer = new Konva.Transformer({
     rotateEnabled: true,
     borderStroke: '#4a90e2',

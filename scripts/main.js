@@ -439,17 +439,41 @@ async function saveDesignAsPNG() {
     try {
         setStatus('Готовим PNG…');
         const dataURL = await exportDesignToPNG({ pixelRatio: 2, padding: 20 });
-        setStatus('');
         if (!dataURL) {
             setStatus('Нечего сохранять — на холсте нет объектов.');
             return;
         }
+
+        const filename = `дизайн-футболки-${new Date().toISOString().replace(/[:.]/g, '-')}.png`;
+        const blob = await (await fetch(dataURL)).blob();
+        setStatus('');
+
+        // iOS Safari: `download` on <a> is unreliable for image data, so use
+        // the Web Share API first — it opens the native share sheet, which
+        // offers "Save Image" / "Save to Files".
+        if (typeof navigator.canShare === 'function' && typeof File === 'function') {
+            const file = new File([blob], filename, { type: 'image/png' });
+            if (navigator.canShare({ files: [file] })) {
+                try {
+                    await navigator.share({ files: [file] });
+                    return;
+                } catch (err) {
+                    if (err && err.name === 'AbortError') return;   // user cancelled
+                    // otherwise fall through to the download fallback
+                }
+            }
+        }
+
+        // Desktop / Android / iOS without Web Share: blob URL + download.
+        const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
-        a.href = dataURL;
-        a.download = `дизайн-футболки-${new Date().toISOString().replace(/[:.]/g, '-')}.png`;
+        a.href = url;
+        a.download = filename;
+        a.rel = 'noopener';
         document.body.appendChild(a);
         a.click();
         a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 10000);
     } catch (err) {
         console.error(err);
         setStatus('Не удалось сохранить PNG.');
